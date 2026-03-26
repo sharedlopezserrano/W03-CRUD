@@ -1,4 +1,4 @@
-const mongodb = require("mongodb");
+const mongodb = require("../data/database");
 const ObjectId = require("mongodb").ObjectId;
 const { validationResult } = require("express-validator");
 
