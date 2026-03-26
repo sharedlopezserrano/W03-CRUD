@@ -2,34 +2,51 @@ const mongodb = require("../data/database");
 const ObjectId = require("mongodb").ObjectId;
 const { validationResult } = require("express-validator");
 
+// 🔹 GET ALL
 const getAll = async (req, res) => {
     try {
         const results = await mongodb.getDatabase().collection("movies").find().toArray();
         res.status(200).json(results);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: "Error getting movies", error: err.message });
     }
 };
 
+// 🔹 GET SINGLE
 const getSingle = async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    if (!ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: "Invalid ID format" });
+    }
 
     try {
         const id = new ObjectId(req.params.id);
+
         const result = await mongodb.getDatabase().collection("movies").findOne({ _id: id });
 
-        if (!result) return res.status(404).json({ message: "Movie not found" });
+        if (!result) {
+            return res.status(404).json({ message: "Movie not found" });
+        }
 
         res.status(200).json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: "Error getting movie", error: err.message });
     }
 };
 
+// 🔹 CREATE
 const createMovie = async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            message: "Validation error",
+            errors: errors.array()
+        });
+    }
 
     try {
         const movie = {
@@ -40,17 +57,37 @@ const createMovie = async (req, res) => {
             pg: req.body.pg
         };
 
+        // 👇 FORZAR ERROR 500 PARA DEMO
+        if (req.body.title === "fail") {
+            throw new Error("Forced server error");
+        }
+
         const response = await mongodb.getDatabase().collection("movies").insertOne(movie);
 
-        res.status(201).json(response);
+        if (response.acknowledged) {
+            res.status(201).json(response);
+        } else {
+            res.status(500).json({ message: "Error creating movie" });
+        }
+
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: "Error creating movie", error: err.message });
     }
 };
 
+// 🔹 UPDATE
 const updateMovie = async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            message: "Validation error",
+            errors: errors.array()
+        });
+    }
+
+    if (!ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: "Invalid ID format" });
+    }
 
     try {
         const id = new ObjectId(req.params.id);
@@ -63,21 +100,37 @@ const updateMovie = async (req, res) => {
             pg: req.body.pg
         };
 
-        const response = await mongodb.getDatabase().collection("movies").replaceOne({ _id: id }, movie);
+        // 👇 FORZAR ERROR 500 PARA DEMO
+        if (req.body.title === "fail") {
+            throw new Error("Forced server error");
+        }
 
-        if (response.modifiedCount > 0) {
+        const response = await mongodb.getDatabase().collection("movies").replaceOne(
+            { _id: id },
+            movie
+        );
+
+        if (response.matchedCount > 0) {
             res.status(204).send();
         } else {
             res.status(404).json({ message: "Movie not found" });
         }
+
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: "Error updating movie", error: err.message });
     }
 };
 
+// 🔹 DELETE
 const deleteMovie = async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    if (!ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: "Invalid ID format" });
+    }
 
     try {
         const id = new ObjectId(req.params.id);
@@ -89,8 +142,9 @@ const deleteMovie = async (req, res) => {
         } else {
             res.status(404).json({ message: "Movie not found" });
         }
+
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: "Error deleting movie", error: err.message });
     }
 };
 

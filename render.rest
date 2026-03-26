@@ -32,3 +32,14 @@ Content-Type: application/json
   "pg": true
 }
 
+### Validation
+
+POST https://w03-crud.onrender.com/movies
+Content-Type: application/json
+
+{
+  "title": "",
+  "year": 1200,
+  "rating": 15,
+  "genre": ""
+}

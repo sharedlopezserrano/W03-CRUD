@@ -13,9 +13,15 @@ const getAll = async (req, res) => {
 };
 
 const getSingle = async (req, res) => {
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    
+    if (!ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: "Invalid ID format" });
     }
 
     try {
@@ -33,10 +39,14 @@ const getSingle = async (req, res) => {
     }
 };
 
+
 const createGame = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
+        return res.status(400).json({
+            message: "Validation error",
+            errors: errors.array()
+        });
     }
 
     try {
@@ -48,6 +58,11 @@ const createGame = async (req, res) => {
             pg: req.body.pg
         };
 
+
+        if (req.body.game === "fail") {
+            throw new Error("Forced server error");
+        }
+
         const response = await mongodb.getDatabase().collection("games").insertOne(game);
 
         if (response.acknowledged) {
@@ -56,15 +71,18 @@ const createGame = async (req, res) => {
             res.status(500).json({ message: "Error creating game" });
         }
     } catch (err) {
-        res.status(500).json({ message: "Server error", error: err.message });
+        res.status(500).json({ message: "Error creating game", error: err.message });
     }
 };
-
 
 const deleteGame = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    if (!ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: "Invalid ID format" });
     }
 
     try {
@@ -82,11 +100,17 @@ const deleteGame = async (req, res) => {
     }
 };
 
-
 const updateGame = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
+        return res.status(400).json({
+            message: "Validation error",
+            errors: errors.array()
+        });
+    }
+
+    if (!ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: "Invalid ID format" });
     }
 
     try {
@@ -100,15 +124,20 @@ const updateGame = async (req, res) => {
             pg: req.body.pg
         };
 
+        
+        if (req.body.game === "fail") {
+            throw new Error("Forced server error");
+        }
+
         const response = await mongodb.getDatabase().collection("games").replaceOne(
             { _id: gameId },
             game
         );
 
-        if (response.modifiedCount > 0) {
+        if (response.matchedCount > 0) {
             res.status(204).send();
         } else {
-            res.status(404).json({ message: "Game not found or no changes made" });
+            res.status(404).json({ message: "Game not found" });
         }
     } catch (err) {
         res.status(500).json({ message: "Error updating game", error: err.message });
