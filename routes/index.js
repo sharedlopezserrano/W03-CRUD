@@ -5,6 +5,7 @@ router.get("/", homeController.games);
 
 
 router.use("/games", require("./games"));
+router.use("/movies", require("./movies"));
 
 
 

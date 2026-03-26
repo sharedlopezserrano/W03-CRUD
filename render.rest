@@ -2,33 +2,33 @@
 GET https://w03-crud.onrender.com/games HTTP/1.1
 
 ### GET contact by ID
-GET https://w03-crud.onrender.com/games/:id HTTP/1.1
+GET https://w03-crud.onrender.com/games/69c40245aab40867a733a205 HTTP/1.1
 
 ### CREATE contact
 POST https://w03-crud.onrender.com/games HTTP/1.1
 Content-Type: application/json
 
 {
-  "game": "Example Game",
-  "yearreleased": 2020,
-  "rating": 8.5,
+  "game": "THE FINALS",
+  "yearreleased": 2023,
+  "rating": 8.0,
   "console": "PlayStation 5",
-  "pg": "T"
+  "pg": true
 }
 
 
 ### DELETE contact
-DELETE https://w03-crud.onrender.com/games/ HTTP/1.1
+DELETE https://w03-crud.onrender.com/games/69c4c4a7364527dd52da5490 HTTP/1.1
 
 ### PUT (Update) contact
-PUT https://w03-crud.onrender.com/games/ HTTP/1.1
+PUT https://w03-crud.onrender.com/games/69c4c4a7364527dd52da5490 HTTP/1.1
 Content-Type: application/json
 
 {
-  "game": "Updated Game",
-  "yearreleased": 2021,
+  "game": "THE FINALS",
+  "yearreleased": 2023,
   "rating": 9.0,
   "console": "Xbox Series X",
-  "pg": "T"
+  "pg": true
 }
 
