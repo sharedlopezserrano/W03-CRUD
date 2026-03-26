@@ -2,7 +2,6 @@ const router = require("express").Router();
 const { check } = require("express-validator");
 const moviesController = require("../controllers/movies");
 
-
 /**
  * @swagger
  * /movies:
@@ -12,9 +11,10 @@ const moviesController = require("../controllers/movies");
  *     responses:
  *       200:
  *         description: List of movies
+ *       500:
+ *         description: Server error
  */
 router.get("/", moviesController.getAll);
-
 
 /**
  * @swagger
@@ -32,11 +32,18 @@ router.get("/", moviesController.getAll);
  *     responses:
  *       200:
  *         description: A movie
+ *       400:
+ *         description: Invalid ID
  *       404:
  *         description: Movie not found
+ *       500:
+ *         description: Server error
  */
-router.get("/:id", [check("id").isMongoId()], moviesController.getSingle);
-
+router.get(
+  "/:id",
+  [check("id").isMongoId().withMessage("Invalid ID")],
+  moviesController.getSingle
+);
 
 /**
  * @swagger
@@ -64,21 +71,22 @@ router.get("/:id", [check("id").isMongoId()], moviesController.getSingle);
  *     responses:
  *       201:
  *         description: Movie created
- *       422:
+ *       400:
  *         description: Validation error
+ *       500:
+ *         description: Server error
  */
 router.post(
   "/",
   [
-    check("title").notEmpty(),
-    check("year").isInt(),
-    check("rating").isFloat({ min: 0, max: 10 }),
-    check("genre").notEmpty(),
-    check("pg").isBoolean()
+    check("title").notEmpty().withMessage("Title is required"),
+    check("year").isInt().withMessage("Year must be a number"),
+    check("rating").isFloat({ min: 0, max: 10 }).withMessage("Rating must be 0-10"),
+    check("genre").notEmpty().withMessage("Genre is required"),
+    check("pg").isBoolean().withMessage("PG must be true or false")
   ],
   moviesController.createMovie
 );
-
 
 /**
  * @swagger
@@ -96,22 +104,25 @@ router.post(
  *     responses:
  *       204:
  *         description: Movie updated
+ *       400:
+ *         description: Validation error
  *       404:
  *         description: Movie not found
+ *       500:
+ *         description: Server error
  */
 router.put(
   "/:id",
   [
-    check("id").isMongoId(),
-    check("title").notEmpty(),
-    check("year").isInt(),
-    check("rating").isFloat({ min: 0, max: 10 }),
-    check("genre").notEmpty(),
-    check("pg").isBoolean()
+    check("id").isMongoId().withMessage("Invalid ID"),
+    check("title").notEmpty().withMessage("Title is required"),
+    check("year").isInt().withMessage("Year must be a number"),
+    check("rating").isFloat({ min: 0, max: 10 }).withMessage("Rating must be 0-10"),
+    check("genre").notEmpty().withMessage("Genre is required"),
+    check("pg").isBoolean().withMessage("PG must be true or false")
   ],
   moviesController.updateMovie
 );
-
 
 /**
  * @swagger
@@ -127,9 +138,17 @@ router.put(
  *     responses:
  *       204:
  *         description: Movie deleted
+ *       400:
+ *         description: Invalid ID
  *       404:
  *         description: Movie not found
+ *       500:
+ *         description: Server error
  */
-router.delete("/:id", [check("id").isMongoId()], moviesController.deleteMovie);
+router.delete(
+  "/:id",
+  [check("id").isMongoId().withMessage("Invalid ID")],
+  moviesController.deleteMovie
+);
 
 module.exports = router;

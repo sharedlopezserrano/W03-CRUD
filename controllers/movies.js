@@ -2,7 +2,6 @@ const mongodb = require("../data/database");
 const ObjectId = require("mongodb").ObjectId;
 const { validationResult } = require("express-validator");
 
-// 🔹 GET ALL
 const getAll = async (req, res) => {
     try {
         const results = await mongodb.getDatabase().collection("movies").find().toArray();
@@ -12,7 +11,6 @@ const getAll = async (req, res) => {
     }
 };
 
-// 🔹 GET SINGLE
 const getSingle = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -38,7 +36,6 @@ const getSingle = async (req, res) => {
     }
 };
 
-// 🔹 CREATE
 const createMovie = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -57,7 +54,6 @@ const createMovie = async (req, res) => {
             pg: req.body.pg
         };
 
-        // 👇 FORZAR ERROR 500 PARA DEMO
         if (req.body.title === "fail") {
             throw new Error("Forced server error");
         }
@@ -75,7 +71,6 @@ const createMovie = async (req, res) => {
     }
 };
 
-// 🔹 UPDATE
 const updateMovie = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -100,7 +95,6 @@ const updateMovie = async (req, res) => {
             pg: req.body.pg
         };
 
-        // 👇 FORZAR ERROR 500 PARA DEMO
         if (req.body.title === "fail") {
             throw new Error("Forced server error");
         }
@@ -121,7 +115,6 @@ const updateMovie = async (req, res) => {
     }
 };
 
-// 🔹 DELETE
 const deleteMovie = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
