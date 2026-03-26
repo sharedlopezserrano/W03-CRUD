@@ -10,7 +10,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "https://w03-crud.onrender.com",
         description: "Production server"
       }
     ]
