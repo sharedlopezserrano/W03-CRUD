@@ -101,6 +101,23 @@ router.post(
  *         description: Movie ID
  *         schema:
  *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               year:
+ *                 type: number
+ *               rating:
+ *                 type: number
+ *               genre:
+ *                 type: string
+ *               pg:
+ *                 type: boolean
  *     responses:
  *       204:
  *         description: Movie updated

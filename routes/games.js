@@ -98,8 +98,26 @@ router.post(
  *       - in: path
  *         name: id
  *         required: true
+ *         description: Game ID
  *         schema:
  *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               game:
+ *                 type: string
+ *               yearreleased:
+ *                 type: number
+ *               rating:
+ *                 type: number
+ *               console:
+ *                 type: string
+ *               pg:
+ *                 type: boolean
  *     responses:
  *       204:
  *         description: Game updated
