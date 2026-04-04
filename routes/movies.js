@@ -70,6 +70,10 @@ router.get(
  *                 type: string
  *               pg:
  *                 type: boolean
+ *              price:
+ *                type: number
+ *              mainActor:
+ *                type: string
  *     responses:
  *       201:
  *         description: Movie created
@@ -120,6 +124,10 @@ router.post(
  *                 type: string
  *               pg:
  *                 type: boolean
+ *              price:
+ *                 type: number
+ *             mainActor:
+ *                 type: string
  *     responses:
  *       204:
  *         description: Movie updated

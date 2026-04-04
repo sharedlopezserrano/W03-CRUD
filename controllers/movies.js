@@ -51,7 +51,9 @@ const createMovie = async (req, res) => {
             year: req.body.year,
             rating: req.body.rating,
             genre: req.body.genre,
-            pg: req.body.pg
+            pg: req.body.pg,
+            price: req.body.price,
+            mainActor: req.body.mainActor
         };
 
         if (req.body.title === "fail") {
@@ -92,7 +94,9 @@ const updateMovie = async (req, res) => {
             year: req.body.year,
             rating: req.body.rating,
             genre: req.body.genre,
-            pg: req.body.pg
+            pg: req.body.pg,
+            price: req.body.price,
+            mainActor: req.body.mainActor
         };
 
         if (req.body.title === "fail") {

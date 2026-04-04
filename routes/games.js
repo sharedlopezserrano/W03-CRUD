@@ -70,6 +70,10 @@ router.get(
  *                 type: string
  *               pg:
  *                 type: boolean
+ *              genre:
+ *                type: string
+ *              price:
+ *               type: number
  *     responses:
  *       201:
  *         description: Game created
@@ -120,6 +124,10 @@ router.post(
  *                 type: string
  *               pg:
  *                 type: boolean
+ *              genre:
+ *               type: string
+ *             price:
+ *              type: number
  *     responses:
  *       204:
  *         description: Game updated

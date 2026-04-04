@@ -55,7 +55,10 @@ const createGame = async (req, res) => {
             yearreleased: req.body.yearreleased,
             rating: req.body.rating,
             console: req.body.console,
-            pg: req.body.pg
+            pg: req.body.pg,
+            genre: req.body.genre,
+            price: req.body.price
+
         };
 
 
@@ -121,7 +124,9 @@ const updateGame = async (req, res) => {
             yearreleased: req.body.yearreleased,
             rating: req.body.rating,
             console: req.body.console,
-            pg: req.body.pg
+            pg: req.body.pg,
+            genre: req.body.genre,
+            price: req.body.price
         };
 
         
