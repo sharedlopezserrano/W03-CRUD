@@ -1,5 +1,5 @@
 ### GET all contacts
-GET https://w03-crud.onrender.com/games HTTP/1.1
+GET https://w03-crud.onrender.com/movies HTTP/1.1
 
 ### GET contact by ID
 GET https://w03-crud.onrender.com/games/69c40245aab40867a733a205 HTTP/1.1

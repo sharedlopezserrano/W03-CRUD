@@ -3,6 +3,8 @@ const { check } = require("express-validator");
 
 const gamesController = require("../controllers/games");
 
+const { isAuthenticated } = require("../middleware/authenticate");
+
 /**
  * @swagger
  * /games:
@@ -84,7 +86,7 @@ router.post(
     check("rating").isFloat({ min: 0, max: 10 }).withMessage("Rating must be 0-10"),
     check("console").notEmpty().withMessage("Console is required"),
     check("pg").isBoolean().withMessage("PG must be true or false")
-  ],
+  ], isAuthenticated,
   gamesController.createGame
 );
 
@@ -137,7 +139,7 @@ router.put(
     check("rating").isFloat({ min: 0, max: 10 }).withMessage("Rating must be 0-10"),
     check("console").notEmpty().withMessage("Console is required"),
     check("pg").isBoolean().withMessage("PG must be true or false")
-  ],
+  ], isAuthenticated,
   gamesController.updateGame
 );
 
@@ -163,7 +165,7 @@ router.put(
  */
 router.delete(
   "/:id",
-  [check("id").isMongoId().withMessage("Invalid ID")],
+  [check("id").isMongoId().withMessage("Invalid ID")], isAuthenticated,
   gamesController.deleteGame
 );
 

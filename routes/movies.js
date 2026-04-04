@@ -2,6 +2,8 @@ const router = require("express").Router();
 const { check } = require("express-validator");
 const moviesController = require("../controllers/movies");
 
+const { isAuthenticated } = require("../middleware/authenticate");
+
 /**
  * @swagger
  * /movies:
@@ -84,7 +86,7 @@ router.post(
     check("rating").isFloat({ min: 0, max: 10 }).withMessage("Rating must be 0-10"),
     check("genre").notEmpty().withMessage("Genre is required"),
     check("pg").isBoolean().withMessage("PG must be true or false")
-  ],
+  ], isAuthenticated,
   moviesController.createMovie
 );
 
@@ -137,7 +139,7 @@ router.put(
     check("rating").isFloat({ min: 0, max: 10 }).withMessage("Rating must be 0-10"),
     check("genre").notEmpty().withMessage("Genre is required"),
     check("pg").isBoolean().withMessage("PG must be true or false")
-  ],
+  ], isAuthenticated,
   moviesController.updateMovie
 );
 
@@ -164,7 +166,7 @@ router.put(
  */
 router.delete(
   "/:id",
-  [check("id").isMongoId().withMessage("Invalid ID")],
+  [check("id").isMongoId().withMessage("Invalid ID")], isAuthenticated,
   moviesController.deleteMovie
 );
 

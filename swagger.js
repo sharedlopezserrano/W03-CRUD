@@ -11,7 +11,7 @@ const swaggerOptions = {
     servers: [
       {
         url: "https://w03-crud.onrender.com",
-        description: "Production server"
+        description: "Live server"
       }
     ]
   },
